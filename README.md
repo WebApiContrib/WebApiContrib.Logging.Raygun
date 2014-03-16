@@ -8,6 +8,10 @@ Logging adapter for Mindscape Raygun. Supports all hosts - web, self-host, Owin 
 Register `RaygunExceptionLogger` as your IExceptionLogger.
 
     config.Services.Add(typeof (IExceptionLogger), new RaygunExceptionLogger());
+
+Requires your Raygun API key to be added as app setting:
+
+    <add key="RaygunAppKey" value="YOUR_API_KEY" />
     
 ## Note
 
