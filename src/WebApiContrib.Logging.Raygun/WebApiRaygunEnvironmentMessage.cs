@@ -7,19 +7,16 @@ using System.Security;
 
 namespace WebApiContrib.Logging.Raygun
 {
+    //source: https://github.com/phillip-haydon/Nancy.Raygun
     public class WebApiRaygunEnvironmentMessage
     {
         private List<double> _diskSpaceFree = new List<double>();
 
         public WebApiRaygunEnvironmentMessage()
         {
-            // Most information about the environment is omitted because it requires
-            // dependencies on Microsoft.Win32 or Microsoft.VisualBasic.Devices
-            // since Nancy.Raygun is used for Web Sites, you probably know most of this info anyway
-
             ProcessorCount = Environment.ProcessorCount;
             Locale = CultureInfo.CurrentCulture.DisplayName;
-            DateTime now = DateTime.Now;
+            var now = DateTime.Now;
             UtcOffset = TimeZone.CurrentTimeZone.GetUtcOffset(now).TotalHours;
             OSVersion = Environment.OSVersion.VersionString;
 

@@ -32,7 +32,7 @@ namespace WebApiContrib.Logging.Raygun
                         Request = new WebApiRaygunRequestMessage(context.Request),
                         Error = new WebApiRaygunErrorMessage(context.Exception),
                         Environment = new WebApiRaygunEnvironmentMessage(),
-                        User = new WebApiRaygunIdentifierMessage(context.RequestContext.Principal.Identity.Name),
+                        User = new WebApiRaygunIdentifierMessage(context.RequestContext != null && context.RequestContext.Principal != null ? context.RequestContext.Principal.Identity.Name : "Anonymous"),
                         Client = new WebApiRaygunClientMessage()
                     }
                 };
