@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Threading;
@@ -9,11 +10,20 @@ namespace WebApiContrib.Logging.Raygun
 {
     public class RaygunExceptionLogger : ExceptionLogger
     {
-        private static readonly string ApiKey = ConfigurationManager.AppSettings["RaygunAppKey"];
+        private readonly string _apiKey;
+
+        public RaygunExceptionLogger() : this(ConfigurationManager.AppSettings["RaygunAppKey"])
+        {}
+
+        public RaygunExceptionLogger(string apiKey)
+        {
+            if (apiKey == null) throw new ArgumentNullException("apiKey");
+            _apiKey = apiKey;
+        }
 
         public async override Task LogAsync(ExceptionLoggerContext context, CancellationToken cancellationToken)
         {
-            if (!string.IsNullOrWhiteSpace(ApiKey))
+            if (!string.IsNullOrWhiteSpace(_apiKey))
             {
                 var message = new WebApiRaygunMessage
                 {
@@ -29,7 +39,7 @@ namespace WebApiContrib.Logging.Raygun
 
                 var client = new HttpClient();
                 var msg = new HttpRequestMessage(HttpMethod.Post, "https://api.raygun.io/entries");
-                msg.Headers.Add("X-ApiKey", ApiKey);
+                msg.Headers.Add("X-ApiKey", _apiKey);
                 msg.Content = new ObjectContent<WebApiRaygunMessage>(message, new JsonMediaTypeFormatter());
 
                 await client.SendAsync(msg, cancellationToken);
